@@ -21,10 +21,7 @@ type TOrderResponse = {
 
 export const makeOrder = createAsyncThunk<TOrderResponse, string[]>(
   'order/new',
-  async (data) => {
-    const newOrder = await orderBurgerApi(data);
-    return newOrder;
-  }
+  orderBurgerApi
 );
 
 export const getOrderData = createAsyncThunk<TOrder, number>(

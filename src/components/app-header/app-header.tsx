@@ -7,9 +7,5 @@ export const AppHeader: FC = () => {
   const user = useSelector(getUser);
   const userName = user ? user.name : '';
 
-  return (
-    <>
-      <AppHeaderUI userName={userName} />
-    </>
-  );
+  return <AppHeaderUI userName={userName} />;
 };
