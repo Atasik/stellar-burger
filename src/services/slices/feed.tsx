@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getFeedsApi, getOrdersApi } from '@api';
+import { getFeedsApi, getOrdersApi } from '../../utils/burger-api';
 
-interface IFeedsReponse {
+interface IFeedsResponse {
   orders: TOrder[];
   total: number;
   totalToday: number;
@@ -12,10 +12,10 @@ interface IFeedsReponse {
 interface IFeedState {
   orders: TOrder[];
   isLoading: boolean;
-  response: IFeedsReponse;
+  response: IFeedsResponse;
 }
 
-const initialState: IFeedState = {
+export const initialState: IFeedState = {
   orders: [],
   isLoading: false,
   response: {
