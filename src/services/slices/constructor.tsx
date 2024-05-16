@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient } from '@utils-types';
 import { TIngredient } from '@utils-types';
 
-interface IConstructorState {
+export interface IConstructorState {
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 }
 
-const initialState: IConstructorState = {
+export const initialState: IConstructorState = {
   bun: null,
   ingredients: []
 };
@@ -49,6 +49,7 @@ export const constructorSlice = createSlice({
         ingredients[index] = ingredients[index - 1];
         ingredients[index - 1] = temp;
       }
+      state.ingredients = ingredients;
     },
     moveIngredientDown: (state, action) => {
       const { ingredients } = state;
@@ -58,6 +59,7 @@ export const constructorSlice = createSlice({
         ingredients[index] = ingredients[index + 1];
         ingredients[index + 1] = temp;
       }
+      state.ingredients = ingredients;
     }
   }
 });

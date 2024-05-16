@@ -13,7 +13,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../utils/burger-api';
 import { setCookie, deleteCookie } from '../../utils/cookie';
 import {} from '@reduxjs/toolkit';
 
@@ -22,7 +22,7 @@ export interface IUserState {
   isAuthChecked: boolean;
 }
 
-const initialState: IUserState = {
+export const initialState: IUserState = {
   data: null,
   isAuthChecked: false
 };
