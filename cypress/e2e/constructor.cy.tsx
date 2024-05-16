@@ -1,6 +1,7 @@
 const testUrl = 'http://localhost:4000';
 const bun = `[data-cy ='643d69a5c3f7b9001cfa093d']`;
 const apiUrl = 'https://norma.nomoreparties.space/api';
+const modal = `[data-cy ='modal']`;
 
 describe('E2E Test', () => {
   beforeEach(() => {
@@ -13,16 +14,13 @@ describe('E2E Test', () => {
     cy.intercept('POST', `${apiUrl}/orders`, { fixture: 'order.json' }).as(
       'getOrders'
     );
+    cy.addToken('test1', 'test2');
     cy.visit(testUrl);
-    cy.setCookie('accessToken', 'test1');
-    localStorage.setItem('refreshToken', 'test2');
-    cy.visit('/');
     cy.contains('Соберите бургер');
   });
 
   afterEach(() => {
-    cy.clearCookie('accessToken');
-    cy.clearLocalStorage('refreshToken');
+    cy.purgeToken();
   });
 
   describe('Check requests replace', function () {
@@ -64,7 +62,7 @@ describe('E2E Test', () => {
       cy.contains('Оформить заказ').click();
       cy.get(`[data-cy ='orderNumber']`).should('have.text', '39393');
       cy.get(`[data-cy ='modal-overlay']`).click({ force: true });
-      cy.get(`[data-cy ='modal']`).should('not.exist');
+      cy.get(modal).should('not.exist');
       cy.get('[data-cy=constructor]')
         .find('[data-cy=constructorList]')
         .find('[data-cy=emptyConstructor]');
@@ -74,32 +72,24 @@ describe('E2E Test', () => {
   describe('Check modals', function () {
     it('Open ingredient modal', () => {
       cy.get(bun).click();
-      cy.get(`[data-cy ='modal']`).should('exist');
+      cy.get(modal).should('exist');
     });
     it('Open modal ingredient data', () => {
       cy.get(bun).click();
-      cy.get(`[data-cy ='modal']`).should('exist');
-      cy.get('[data-cy="image_large"]').should('be.visible');
-      cy.get(`[data-cy ='fat']`).should('have.text', '26');
-      cy.get(`[data-cy ='carbohydrates']`).should('have.text', '85');
-      cy.get(`[data-cy ='calories']`).should('have.text', '643');
-      cy.get(`[data-cy ='proteins']`).should('have.text', '44');
-      cy.get(`[data-cy ='name']`).should(
-        'have.text',
-        'Флюоресцентная булка R2-D3'
-      );
+      cy.get(modal).should('exist');
+      cy.checkInredient('26', '85', '643', '44', 'Флюоресцентная булка R2-D3');
     });
     it('Close modal', () => {
       cy.get(bun).click();
-      cy.get('[data-cy=modal]').should('exist');
+      cy.get(modal).should('exist');
       cy.get(`[data-cy ='closeModal']`).click();
-      cy.get(`[data-cy ='modal']`).should('not.exist');
+      cy.get(modal).should('not.exist');
     });
     it('Close modal overlay', () => {
       cy.get(bun).click();
-      cy.get('[data-cy=modal]').should('exist');
+      cy.get(modal).should('exist');
       cy.get(`[data-cy ='modal-overlay']`).click({ force: true });
-      cy.get(`[data-cy ='modal']`).should('not.exist');
+      cy.get(modal).should('not.exist');
     });
   });
 });

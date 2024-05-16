@@ -25,13 +25,47 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      addToken(accessToken: string, refreshToken: string): void;
+      purgeToken(): void;
+      checkInredient(
+        fat: string,
+        carbohydrates: string,
+        calories: string,
+        proteins: string,
+        name: string
+      ): void;
+    }
+  }
+}
+
+export function addToken(accessToken: string, refreshToken: string) {
+  cy.setCookie('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+}
+
+export function purgeToken() {
+  cy.clearCookie('accessToken');
+  cy.clearLocalStorage('refreshToken');
+}
+
+export function checkInredient(
+  fat: string,
+  carbohydrates: string,
+  calories: string,
+  proteins: string,
+  name: string
+) {
+  cy.get('[data-cy="image_large"]').should('be.visible');
+  cy.get(`[data-cy ='fat']`).should('have.text', fat);
+  cy.get(`[data-cy ='carbohydrates']`).should('have.text', carbohydrates);
+  cy.get(`[data-cy ='calories']`).should('have.text', calories);
+  cy.get(`[data-cy ='proteins']`).should('have.text', proteins);
+  cy.get(`[data-cy ='name']`).should('have.text', name);
+}
+
+Cypress.Commands.add('addToken', addToken);
+Cypress.Commands.add('purgeToken', purgeToken);
+Cypress.Commands.add('checkInredient', checkInredient);
